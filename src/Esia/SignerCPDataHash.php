@@ -1,3 +1,5 @@
+<?php
+
 class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
 {
     public function sign(string $message): string
