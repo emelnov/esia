@@ -21,7 +21,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use RuntimeException;
-use SignerCPDataHash;
+use Esia\SignerCPDataHash;
 
 /**
  * Class OpenId

@@ -1,5 +1,7 @@
 <?php
 
+namespace Esia;
+
 use Esia\Signer\AbstractSignerPKCS7;
 use Esia\Signer\Exceptions\CannotReadCertificateException;
 use Esia\Signer\Exceptions\CannotReadPrivateKeyException;
