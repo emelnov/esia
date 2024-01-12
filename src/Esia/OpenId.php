@@ -21,6 +21,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use RuntimeException;
+use SignerCPDataHash;
 
 /**
  * Class OpenId
@@ -118,7 +119,7 @@ class OpenId
     }
 
     public function buildUrl_V2()
-{
+    {
      $timestamp = $this->getTimeStamp();
      $state = $this->buildState();
      // собираем client_secret по новым правилам
@@ -129,10 +130,10 @@ class OpenId
           . $this->config->getRedirectUrl();    
      // используем алгоритм ГОСТ2012 для подписания     
      $this->signer = new SignerCPDataHash(
-          $config->getCertPath(),           // для КриптоПро эти 
-          $config->getPrivateKeyPath(),     // параметры не нужны
-          $config->getPrivateKeyPassword(), // потому что сертификат и ключ
-          $config->getTmpPath()             // импортированы в хранилище
+          $this->config->getCertPath(),           // для КриптоПро эти
+          $this->config->getPrivateKeyPath(),     // параметры не нужны
+          $this->config->getPrivateKeyPassword(), // потому что сертификат и ключ
+          $this->config->getTmpPath()             // импортированы в хранилище
      );
      $clientSecret = $this->signer->sign($message);
      $url = $this->config->getCodeUrl_V2() . '?%s';
@@ -149,7 +150,7 @@ class OpenId
      ];
      $request = http_build_query($params);      
      return sprintf($url, $request); 
-}
+    }
 
     /**
      * Return an url for logout
@@ -231,10 +232,10 @@ class OpenId
         $state = $this->buildState();
 
         $this->signer = new SignerCPDataHash(
-            $config->getCertPath(),
-            $config->getPrivateKeyPath(),
-            $config->getPrivateKeyPassword(),
-            $config->getTmpPath()
+            $this->config->getCertPath(),
+            $this->config->getPrivateKeyPath(),
+            $this->config->getPrivateKeyPassword(),
+            $this->config->getTmpPath()
         );
 
         $clientSecret = $this->signer->sign(

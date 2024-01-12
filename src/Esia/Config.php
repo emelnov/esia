@@ -182,6 +182,11 @@ class Config
         return $this->portalUrl . $this->codeUrlPath;
     }
 
+    public function getCodeUrl_V2(): string
+    {
+        return $this->portalUrl . $this->codeUrlPath_V2;
+    }
+
     /**
      * @return string
      * @throws InvalidConfigurationException
