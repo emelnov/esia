@@ -9,6 +9,18 @@ use Esia\Signer\SignerInterface;
 
 class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
 {
+
+    /**
+     * Config
+     *
+     * @var Config
+     */
+    private $config;
+
+    public function setConfig(Config $config){
+        $this->config = $config;
+    }
+
     public function sign(string $message): string
     {
         $store = new \CPStore();
