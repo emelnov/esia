@@ -1,5 +1,10 @@
 <?php
 
+use Esia\Signer\AbstractSignerPKCS7;
+use Esia\Signer\Exceptions\CannotReadCertificateException;
+use Esia\Signer\Exceptions\CannotReadPrivateKeyException;
+use Esia\Signer\SignerInterface;
+
 class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
 {
     public function sign(string $message): string
