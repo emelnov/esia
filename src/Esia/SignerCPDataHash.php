@@ -36,10 +36,10 @@ class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
     {
         $store = new \CPStore();
         $store->Open(CURRENT_USER_STORE, 'My', STORE_OPEN_READ_ONLY); // используем хранилище My текущего пользователя (www-data)
-        // $certs = $store->get_Certificates();
+        $certs = $store->get_Certificates();
         // $certlist = $certs->Find(CERTIFICATE_FIND_SUBJECT_NAME, $this->config->getClientId(), 0); // ищем сертификат, у которогое Subject = мнемонике нашей ИС
-        // $cert = $certlist->Item(1);
-        $cert = SetupCertificate(CURRENT_USER_STORE, "My", STORE_OPEN_READ_ONLY, CERTIFICATE_FIND_SHA1_HASH, $this->hash, 0, 1);
+        $certlist = $certs->Find(CERTIFICATE_FIND_SHA1_HASH, $this->hash, 0);
+        $cert = $certlist->Item(1);
         if (!$cert) {
             throw new CannotReadCertificateException('Cannot read the certificate');
         }        
