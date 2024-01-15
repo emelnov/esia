@@ -17,17 +17,29 @@ class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
      */
     private $config;
 
+    /**
+     * Config
+     *
+     * @var string
+     */
+    private $hash;
+
     public function setConfig(Config $config){
         $this->config = $config;
+    }
+
+    public function setHash(string $hash){
+        $this->hash = $hash;
     }
 
     public function sign(string $message): string
     {
         $store = new \CPStore();
         $store->Open(CURRENT_USER_STORE, 'My', STORE_OPEN_READ_ONLY); // используем хранилище My текущего пользователя (www-data)
-        $certs = $store->get_Certificates();
-        $certlist = $certs->Find(CERTIFICATE_FIND_SUBJECT_NAME, $this->config->getClientId(), 0); // ищем сертификат, у которогое Subject = мнемонике нашей ИС
-        $cert = $certlist->Item(1);
+        // $certs = $store->get_Certificates();
+        // $certlist = $certs->Find(CERTIFICATE_FIND_SUBJECT_NAME, $this->config->getClientId(), 0); // ищем сертификат, у которогое Subject = мнемонике нашей ИС
+        // $cert = $certlist->Item(1);
+        $cert = SetupCertificate(CURRENT_USER_STORE, "My", STORE_OPEN_READ_ONLY, CERTIFICATE_FIND_SHA1_HASH, $this->hash, 0, 1);
         if (!$cert) {
             throw new CannotReadCertificateException('Cannot read the certificate');
         }        
