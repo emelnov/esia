@@ -117,7 +117,7 @@ class OpenId
         return sprintf($url, $request);
     }
 
-    public function buildUrl_V2()
+    public function buildUrl_V2(string $hash)
     {
      $timestamp = $this->getTimeStamp();
      $state = $this->buildState();
@@ -135,6 +135,7 @@ class OpenId
           $this->config->getTmpPath()             // импортированы в хранилище
      );
      $this->signer->setConfig($this->config);
+     $this->signer->setHash($hash);
      $clientSecret = $this->signer->sign($message);
      $url = $this->config->getCodeUrl_V2() . '?%s';
      $params = [
