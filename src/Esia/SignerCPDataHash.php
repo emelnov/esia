@@ -24,12 +24,21 @@ class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
      */
     private $hash;
 
+    /**
+     * Config
+     *
+     * @var boolean
+     */
+    private $is_hash = false;
+
     public function setConfig(Config $config){
         $this->config = $config;
+        $this->is_hash = false;
     }
 
     public function setHash(string $hash){
         $this->hash = $hash;
+        $this->is_hash = true;
     }
 
     public function sign(string $message): string
@@ -37,9 +46,12 @@ class SignerCPDataHash extends AbstractSignerPKCS7 implements SignerInterface
         $store = new \CPStore();
         $store->Open(CURRENT_USER_STORE, 'My', STORE_OPEN_READ_ONLY); // используем хранилище My текущего пользователя (www-data)
         $certs = $store->get_Certificates();
-        $certlist = $certs->Find(CERTIFICATE_FIND_SUBJECT_NAME, $this->config->getClientId(), 0); // ищем сертификат, у которогое Subject = мнемонике нашей ИС
-        // $certlist = $certs->Find(CERTIFICATE_FIND_SHA1_HASH, $this->hash, 0);
-        $cert = $certlist->Item(0);
+        if ($this->is_hash){
+            $certlist = $certs->Find(CERTIFICATE_FIND_SHA1_HASH, $this->hash, 0);
+        } else {
+            $certlist = $certs->Find(CERTIFICATE_FIND_SUBJECT_NAME, $this->config->getClientId(), 0); // ищем сертификат, у которогое Subject = мнемонике нашей ИС
+        }
+        $cert = $certlist->Item(1);
         if (!$cert) {
             throw new CannotReadCertificateException('Cannot read the certificate');
         }        
