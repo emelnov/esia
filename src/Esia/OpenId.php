@@ -134,8 +134,8 @@ class OpenId
           $this->config->getPrivateKeyPassword(), // потому что сертификат и ключ
           $this->config->getTmpPath()             // импортированы в хранилище
      );
-     // $this->signer->setConfig($this->config);
-     $this->signer->setHash($hash);
+     $this->signer->setConfig($this->config);
+     // $this->signer->setHash($hash);
      $clientSecret = $this->signer->sign($message);
      $url = $this->config->getCodeUrl_V2() . '?%s';
      $params = [
